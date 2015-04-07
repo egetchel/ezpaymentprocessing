@@ -14,7 +14,7 @@ import com.ezpaymentprocessing.model.PurchaseResponse;
 @Path ("/purchase")
 public class PurchaseRestService {
 	
-	@GET
+	@GET 
 	@Path("/{param}")
 	@Produces("application/json")
 	public Response purchase(@PathParam("param") String amountParam) {
