@@ -73,12 +73,13 @@ jboss-eap-*-maven-repository/org/jboss/spec/jboss-javaee-6.0
 		<artifactId>resteasy-jackson-provider</artifactId>
 		<version>2.3.8.Final-redhat-3</version>
 	</dependency>
+<!--  	
 	<dependency>
 			<groupId>com.ezpaymentprocessing.model</groupId>
 			<artifactId>model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			
-		</dependency>	
+		</dependency>
+-->
 	</dependencies>
 	<profiles>
 		<profile>
