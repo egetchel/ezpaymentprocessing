@@ -77,7 +77,7 @@ jboss-eap-*-maven-repository/org/jboss/spec/jboss-javaee-6.0
 			<groupId>com.ezpaymentprocessing.model</groupId>
 			<artifactId>model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
+			
 		</dependency>	
 	</dependencies>
 	<profiles>
