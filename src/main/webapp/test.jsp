@@ -8,6 +8,7 @@ System.out.println("context path: " + contextPath);
 // Look for the two most common local host addresses.  Note, check the bind
 // address if this does not submit locally as the machine may be using IPV6 or 
 // a different address
+
 if ( contextPath.startsWith("/ezpaymentprocessing"))
 {
 	contextPath = "/merchantservices";
@@ -16,7 +17,10 @@ else
 {
 	contextPath = "http://merchantservices-egetchel.rhcloud.com";
 }
+contextPath = contextPath + "/rest/processPromotion";
 
+//contextPath="/merchantservices/rest/processPromotion";
+//contextPath="/ezpaymentprocessing/rest/purchase";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -36,7 +40,9 @@ Please Select the purchase amount to send to the promotion engine
 	</select> 
 	<button type="button" id="submitButtonRest" onclick="javascript:submitRestPost();">Rest Endpoint - POST</button>
 </form>
+Response:<br>
 <div id="result"></div>
+<br>
 <div id="debug">
 Context Path: <%=contextPath %>
 </div> 
@@ -47,26 +53,15 @@ function submitRestPost()
 	var frm = $("#purchaseForm");
 	var data = JSON.stringify(frm.serializeObject());
 	$.ajax({
-		  url:'<%=contextPath%>/rest/processPromotion',
+		  url:'<%=contextPath%>',
 		  type:"POST",
 		  data:data,
 		  contentType:"application/json; charset=utf-8",
 		  dataType:"json",
-		  success: function(response){
-			  
-			  // Invoked if we have a valid payload back
-			  var approved = response.approved;
-			  var message  = response.message;
-			  var consoleMessage;
-			  if (approved) {
-				consoleMessage = "Your purchase was approved";
-			  }
-			  else
-			  {
-				  consoleMessage ="Purchase denied. "+ message;
-			  }
-		      //var consoleMessage = "Purchase Approved " + response.approved + " Reason: " + response.message; 
-			  $( "#result" ).html( consoleMessage );
+		  success: function(response)
+		  {
+			  //alert(response);
+			  $( "#result" ).html( response.status );
 		  }
 		});
 
