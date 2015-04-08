@@ -32,8 +32,8 @@ public class PurchaseRestService {
 	@GET 
 	@Path("/{param}")
 	@Produces("application/json")
-	public Response purchase(@PathParam("param") String amountParam) {
-		
+	public Response purchase(@PathParam("param") String amountParam, @Context HttpServletRequest request ) {
+		System.out.println("[GET] PurchaseRequest: " + amountParam + " for contextPath: " + request.getContextPath());
 		int purchaseAmount = Integer.parseInt(amountParam);
 		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseAmount);
 		
@@ -46,21 +46,22 @@ public class PurchaseRestService {
 	@Consumes("application/json")
 	public Response purchase(PurchaseRequest purchaseRequest, @Context HttpServletRequest request) 
 	{
-		System.out.println("PurchaseRequest: " + purchaseRequest + " for contextPath: " + request.getContextPath());
+		System.out.println("[POST] PurchaseRequest: " + purchaseRequest + " for contextPath: " + request.getContextPath());
 		String contextPath = request.getContextPath();
 		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseRequest.getAmount());
-		process(contextPath);
+		process(purchaseRequest.getAmount(), contextPath);
 		
 		return Response.status(200).entity(purchaseResponse).build();
 	}
 	
-	private void process(String contextPath)
+	private void process(int purchaseAmount, String contextPath)
 	{
+		System.out.println("Qualifying Promotion...\n");
 		  try {
-			  	if (contextPath.startsWith("/expaymentprocessing"))
+			  	if (contextPath.startsWith("/ezpaymentprocessing"))
 			  	{
 			  		// local deployment
-			  		contextPath = "/merchantservices";
+			  		contextPath = "http://localhost:8080/merchantservices";
 			  	}
 			  	else
 			  	{
@@ -68,7 +69,7 @@ public class PurchaseRestService {
 			  	}
 			  			
 				ClientRequest request = new ClientRequest(
-						"http://localhost:8080/merchantservices/rest/processPromotion/10");
+						contextPath + "/rest/processPromotion/10");
 				request.accept("application/json");
 				ClientResponse<String> response = request.get(String.class);
 		 
@@ -81,7 +82,7 @@ public class PurchaseRestService {
 					new ByteArrayInputStream(response.getEntity().getBytes())));
 		 
 				String output;
-				System.out.println("Output from Server .... \n");
+				System.out.println("Output from Server .... ");
 				while ((output = br.readLine()) != null) {
 					System.out.println(output);
 				}
