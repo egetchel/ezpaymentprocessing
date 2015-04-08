@@ -78,7 +78,7 @@ jboss-eap-*-maven-repository/org/jboss/spec/jboss-javaee-6.0
 			<artifactId>httpcomponents-client</artifactId>
 			<version>4.2.6.redhat-3</version>
 		</dependency>
-<!--  	
+<!--  	 
 	<dependency>
 			<groupId>com.ezpaymentprocessing.model</groupId>
 			<artifactId>model</artifactId>
