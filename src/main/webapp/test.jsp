@@ -57,7 +57,7 @@ function submitPost(restEndpoint)
 {
 	var frm = $("#purchaseForm");
 	var data = JSON.stringify(frm.serializeObject());
-	
+	$( "#result" ).html("");
 	$("#debug").html('Endpoint: '+ restEndpoint + '<br>Data: ' + data );
 	$.ajax({
 		  url:restEndpoint,
