@@ -3,21 +3,23 @@
 // This is a test page that allows debugging of various transport methods
 
 // The endpoints need to be progromatically calculated depending on if we are running in OSE or locally
-String contextPath = request.getContextPath();
-System.out.println("context path: " + contextPath);
+String paymentContextPath;
+String promotionContextPath;
+System.out.println("context path: " + request.getContextPath());
 // Look for the two most common local host addresses.  Note, check the bind
 // address if this does not submit locally as the machine may be using IPV6 or 
 // a different address
-
-if ( contextPath.startsWith("/ezpaymentprocessing"))
+if (request.getContextPath().startsWith("/"))
 {
-	contextPath = "/merchantservices";
+	paymentContextPath = "/ezpaymentprocessing/rest/";
+	promotionContextPath = "/merchantservices/rest/"; 
 }
 else
 {
-	contextPath = "http://merchantservices-egetchel.rhcloud.com";
+	paymentContextPath = "http://ezpaymentprocessing-egetchel.rhcloud.com/rest/";
+	promotionContextPath = "http://merchantservices-egetchel.rhcloud.com/rest/";
 }
-contextPath = contextPath + "/rest/processPromotion";
+
 
 //contextPath="/merchantservices/rest/processPromotion";
 //contextPath="/ezpaymentprocessing/rest/purchase";
@@ -27,10 +29,11 @@ contextPath = contextPath + "/rest/processPromotion";
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-<title>Movie Ticket App</title>
+<title>REST Test App</title>
 </head>
 <body>
-Please Select the purchase amount to send to the promotion engine
+<div style="border:1px solid black">
+
 <form id="purchaseForm">
 	<input type="hidden" name="merchantId" id="merchantId" value="1">
 	<select name="amount" id="amount">
@@ -38,22 +41,26 @@ Please Select the purchase amount to send to the promotion engine
   		<option value="20">$20</option>
   		<option value="30">$30</option>
 	</select> 
-	<button type="button" id="submitButtonRest" onclick="javascript:submitRestPost();">Rest Endpoint - POST</button>
+	<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=promotionContextPath%>processPromotion');">POST - Promotion</button>
+	<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=paymentContextPath%>purchase');">POST - Purchase</button>
 </form>
+Request:<div id="debug"></div>
+<br><br> 
 Response:<br>
 <div id="result"></div>
 <br>
-<div id="debug">
-Context Path: <%=contextPath %>
-</div> 
+
+</div>
 <script type="text/javascript"> 
 
-function submitRestPost() 
+function submitPost(restEndpoint) 
 {
 	var frm = $("#purchaseForm");
 	var data = JSON.stringify(frm.serializeObject());
+	
+	$("#debug").html('Endpoint: '+ restEndpoint + '<br>Data: ' + data );
 	$.ajax({
-		  url:'<%=contextPath%>',
+		  url:restEndpoint,
 		  type:"POST",
 		  data:data,
 		  contentType:"application/json; charset=utf-8",
@@ -61,7 +68,7 @@ function submitRestPost()
 		  success: function(response)
 		  {
 			  //alert(response);
-			  $( "#result" ).html( response.status );
+			  $( "#result" ).html( JSON.stringify(response) );
 		  }
 		});
 
