@@ -81,8 +81,8 @@ REST Endpoint Test Application
 	 <tr>
 	 	<td>&nbsp;</td>
 	 	<td>
-			<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=promotionContextPath%>processPromotion');">POST - Promotion</button>
-			<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=paymentContextPath%>purchase');">POST - Purchase</button>
+	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=paymentContextPath%>purchase');">Purchase (POST)</button>
+			<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=promotionContextPath%>processPromotion');">Promotion (POST)</button>
 		</td>
 	</tr>
 	<tr>
