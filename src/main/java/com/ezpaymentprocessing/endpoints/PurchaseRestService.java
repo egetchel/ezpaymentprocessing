@@ -2,7 +2,6 @@ package com.ezpaymentprocessing.endpoints;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,18 +9,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-
-
 
 //import org.apache.http.client.ClientProtocolException;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
-
-import javax.ws.rs.core.UriBuilder;
 
 import com.ezpaymentprocessing.model.PurchaseRequest;
 import com.ezpaymentprocessing.model.PurchaseResponse;
@@ -29,14 +24,24 @@ import com.ezpaymentprocessing.model.PurchaseResponse;
 @Path ("/purchase")
 public class PurchaseRestService {
 	
-	@GET 
-	@Path("/{param}")
+	// Sample URI: /purchase/query?amount=10&merchantId=xyz&mobilePhone=5556667777
+	@GET  
+	@Path("/query")
 	@Produces("application/json")
-	public Response purchase(@PathParam("param") String amountParam, @Context HttpServletRequest request ) {
-		System.out.println("[GET] PurchaseRequest: " + amountParam + " for contextPath: " + request.getContextPath());
-		int purchaseAmount = Integer.parseInt(amountParam);
-		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseAmount);
+	public Response purchase(
+			@QueryParam("merchantId") String merchantId, 
+			@QueryParam("amount") String amount,
+			@QueryParam("mobileNumber") String mobileNumber,
+			@Context HttpServletRequest request ) {
+		System.out.println("[GET] PurchaseRequest: MerchantId[" + merchantId + "] Amount: [ " + amount + "] Mobile Phone: [" + mobileNumber +"] for contextPath: " + request.getContextPath());
+
+		PurchaseRequest purchaseRequest = new PurchaseRequest();
+		purchaseRequest.setMerchantId(merchantId);
+		purchaseRequest.setAmount(Integer.parseInt(amount));
+		purchaseRequest.setMobileNumber(mobileNumber);
+		String contextPath = request.getContextPath();
 		
+		PurchaseResponse purchaseResponse = process(purchaseRequest, contextPath);
 		return Response.status(200).entity(purchaseResponse).build();
  
 	}
@@ -48,16 +53,19 @@ public class PurchaseRestService {
 	{
 		System.out.println("[POST] PurchaseRequest: " + purchaseRequest + " for contextPath: " + request.getContextPath());
 		String contextPath = request.getContextPath();
-		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseRequest.getAmount());
-		process(purchaseRequest.getAmount(), contextPath);
+		
+		PurchaseResponse purchaseResponse = process(purchaseRequest, contextPath);
 		
 		return Response.status(200).entity(purchaseResponse).build();
 	}
 	
-	private void process(int purchaseAmount, String contextPath)
+	private PurchaseResponse process(PurchaseRequest purchaseRequest, String contextPath)
 	{
-		System.out.println("Qualifying Promotion...\n");
-		  try {
+		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseRequest.getAmount());
+		if (purchaseResponse.isApproved())
+		{
+			System.out.println("Qualifying Promotion...\n");
+			try {
 			  	if (contextPath.startsWith("/ezpaymentprocessing"))
 			  	{
 			  		// local deployment
@@ -92,6 +100,8 @@ public class PurchaseRestService {
 		  {
 			  E.printStackTrace();
 		  }
+		}
+		return purchaseResponse;
 		 
 		  /*
 		  catch (ClientProtocolException e) {

@@ -78,6 +78,9 @@ REST Endpoint Test Application
 			</select>
 		</td>
 	 </tr>
+	<tr>
+		<td>Mobile:</td>
+		<td><input type="text" name="mobileNumber" id="mobileNumber" value="5556667777"></td>
 	 <tr>
 	 	<td>&nbsp;</td>
 	 	<td>
