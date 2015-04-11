@@ -64,7 +64,7 @@ public class PurchaseRestService {
 		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseRequest.getAmount());
 		if (purchaseResponse.isApproved())
 		{
-			System.out.println("Qualifying Promotion...\n");
+			System.out.println("Invoking remote promotion qualification service...\n");
 			try {
 			  	if (contextPath.startsWith("/ezpaymentprocessing"))
 			  	{
@@ -77,7 +77,7 @@ public class PurchaseRestService {
 			  	}
 			  			
 				ClientRequest request = new ClientRequest(
-						contextPath + "/rest/processPromotion/10");
+						contextPath + "/rest/processPromotion/query?merchantId="+purchaseRequest.getMerchantId()+"&mobileNumber="+purchaseRequest.getMobileNumber()+"&amount="+purchaseRequest.getAmount());
 				request.accept("application/json");
 				ClientResponse<String> response = request.get(String.class);
 		 
@@ -102,25 +102,7 @@ public class PurchaseRestService {
 		  }
 		}
 		return purchaseResponse;
-		 
-		  /*
-		  catch (ClientProtocolException e) {
-		 
-				e.printStackTrace();
-		 
-			  } catch (IOException e) {
-		 
-				e.printStackTrace();
-		 
-			  } catch (Exception e) {
-		 
-				e.printStackTrace();
-		 
-			  }
-*/		 
+
 	}
-
-	
-
 
 }
