@@ -23,6 +23,11 @@
 			org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
 		</listener-class>
 	</listener>
+	<listener>
+		<listener-class>
+			com.ezpaymentprocessing.utils.PaymentProcessingStartupListener
+		</listener-class>
+	</listener>	
  
 	<servlet>
 		<servlet-name>resteasy-servlet</servlet-name>

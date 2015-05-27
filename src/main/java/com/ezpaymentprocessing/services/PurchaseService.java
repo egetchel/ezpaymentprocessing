@@ -1,4 +1,4 @@
-package com.ezpaymentprocessing.endpoints;
+package com.ezpaymentprocessing.services;
 
 import com.ezpaymentprocessing.model.PurchaseResponse;
 

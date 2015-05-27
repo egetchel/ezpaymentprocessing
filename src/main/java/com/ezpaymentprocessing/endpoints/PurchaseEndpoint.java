@@ -1,9 +1,5 @@
 package com.ezpaymentprocessing.endpoints;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,19 +10,19 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-//import org.apache.http.client.ClientProtocolException;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
-
 import com.ezpaymentprocessing.model.PurchaseRequest;
 import com.ezpaymentprocessing.model.PurchaseResponse;
+import com.ezpaymentprocessing.services.PurchaseService;
+import com.ezpaymentprocessing.utils.PaymentProcessingConfigManager;
+import com.ezpaymentprocessing.utils.RestClient;
+
 
 @Path ("/purchase")
-public class PurchaseRestService {
+public class PurchaseEndpoint {
 	
 	// Sample URI: /purchase/query?amount=10&merchantId=xyz&mobilePhone=5556667777
+	// http://localhost:8080/ezpaymentprocessing/rest/purchase?merchantId=monetizationservice&amount=10&mobileNumber=5556667777
 	@GET  
-	@Path("/query")
 	@Produces("application/json")
 	public Response purchase(
 			@QueryParam("merchantId") String merchantId, 
@@ -65,37 +61,13 @@ public class PurchaseRestService {
 		if (purchaseResponse.isApproved())
 		{
 			System.out.println("Invoking remote promotion qualification service...\n");
-			try {
-			  	if (contextPath.startsWith("/ezpaymentprocessing"))
-			  	{
-			  		// local deployment
-			  		contextPath = "http://localhost:8080/merchantservices";
-			  	}
-			  	else
-			  	{
-			  		contextPath = "http://merchantservices-egetchel.rhcloud.com";
-			  	}
-			  			
-				ClientRequest request = new ClientRequest(
-						contextPath + "/rest/processPromotion/query?merchantId="+purchaseRequest.getMerchantId()+"&mobileNumber="+purchaseRequest.getMobileNumber()+"&amount="+purchaseRequest.getAmount());
-				request.accept("application/json");
-				ClientResponse<String> response = request.get(String.class);
+			try 
+			{
+				String url = PaymentProcessingConfigManager.getPromotionURL(purchaseRequest.getMerchantId());
+				RestClient client = new RestClient();
+				client.sendGet(url, "merchantId="+purchaseRequest.getMerchantId()+"&mobileNumber="+purchaseRequest.getMobileNumber()+"&amount="+purchaseRequest.getAmount());
 		 
-				if (response.getStatus() != 200) {
-					throw new RuntimeException("Failed : HTTP error code : "
-						+ response.getStatus());
-				}
-		 
-				BufferedReader br = new BufferedReader(new InputStreamReader(
-					new ByteArrayInputStream(response.getEntity().getBytes())));
-		 
-				String output;
-				System.out.println("Output from Server .... ");
-				while ((output = br.readLine()) != null) {
-					System.out.println(output);
-				}
-		 
-			  } 
+		  } 
 		  catch (Exception E)
 		  {
 			  E.printStackTrace();

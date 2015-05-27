@@ -1,25 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-// This is a test page that allows debugging of various transport methods
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="com.ezpaymentprocessing.utils.PaymentProcessingConfigManager" %>
+<%@ page import="java.util.*" %>
 
-// The endpoints need to be progromatically calculated depending on if we are running in OSE or locally
-String paymentContextPath;
-String promotionContextPath;
-System.out.println("context path: " + request.getContextPath());
-// Working locally, the contextPath is relative, so will start with a slash
-// a different address
-if (request.getContextPath().startsWith("/"))
-{
-	paymentContextPath = "/ezpaymentprocessing/rest/";
-	promotionContextPath = "/merchantservices/rest/"; 
-}
-else
-{
-	paymentContextPath = "http://ezpaymentprocessing-egetchel.rhcloud.com/rest/";
-	promotionContextPath = "http://merchantservices-egetchel.rhcloud.com/rest/";
-}
 
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -81,11 +65,34 @@ REST Endpoint Test Application
 	<tr>
 		<td>Mobile:</td>
 		<td><input type="text" name="mobileNumber" id="mobileNumber" value="5556667777"></td>
+	</tr>
+	<tr>
+		<td>Remote Endpoint: </td>
+		<td>
+		<select name="merchantId">
+<%
+// Because I don't want to fight JSTL tags when Static classes/methods are involved...
+			Map <String,String> serverURLs = PaymentProcessingConfigManager.getMotenizationServerURLs();
+			if (serverURLs != null)
+			{
+				for (String merchantId : serverURLs.keySet())
+				{
+					out.print("<option value=\"");
+					out.print(merchantId);
+					out.print("\">");
+					out.print(merchantId);
+					out.print("</option>");
+				}
+			}
+
+%>			
+		</select>
+		</td>
+	</tr>
 	 <tr>
 	 	<td>&nbsp;</td>
 	 	<td>
-	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=paymentContextPath%>purchase');">Purchase (POST)</button>
-			<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=promotionContextPath%>processPromotion');">Promotion (POST)</button>
+	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=PaymentProcessingConfigManager.getPaymentProcessingURL()%>');">Purchase (POST)</button>
 		</td>
 	</tr>
 	<tr>
