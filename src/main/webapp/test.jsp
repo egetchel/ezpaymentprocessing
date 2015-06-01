@@ -49,7 +49,6 @@ REST Endpoint Test Application
 </div>
 <div class="black-border">
 <form id="purchaseForm">
-<input type="hidden" name="merchantId" id="merchantId" value="1">
 <br/>
 <table>
 	<tr>
@@ -67,9 +66,9 @@ REST Endpoint Test Application
 		<td><input type="text" name="mobileNumber" id="mobileNumber" value="5556667777"></td>
 	</tr>
 	<tr>
-		<td>Remote Endpoint: </td>
+		<td>Selected Endpoint: </td>
 		<td>
-		<select name="merchantId">
+		<select name="merchantId" onchange="javascript:changeEndpoint();">
 <%
 // Because I don't want to fight JSTL tags when Static classes/methods are involved...
 			Map <String,String> serverURLs = PaymentProcessingConfigManager.getMotenizationServerURLs();
@@ -87,6 +86,7 @@ REST Endpoint Test Application
 
 %>			
 		</select>
+		
 		</td>
 	</tr>
 	 <tr>
@@ -95,6 +95,16 @@ REST Endpoint Test Application
 	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=PaymentProcessingConfigManager.getPaymentProcessingURL()%>');">Purchase (POST)</button>
 		</td>
 	</tr>
+</table>
+</form>
+</div>
+<div class="black-border">
+<table>
+	<tr>
+		<td>Available Endpoints:
+		</td>
+		<td> 
+		</td>
 	<tr>
 		<td>Endpoint:</td>
 		<td><div id="endpoint"></div></td>
@@ -107,12 +117,17 @@ REST Endpoint Test Application
 		<td>Response Data:</td>
 		<td><div id="result"></div></td>
 	</tr>
-</table>		
-</form>
+</table>
+</div>		
+
 </div>
 </div>
 <script type="text/javascript"> 
-
+function changeEndpoint()
+{
+	var selectedText = $( "#myselect option:selected" ).text();
+	
+}
 function submitPost(restEndpoint) 
 {
 	var frm = $("#purchaseForm");
