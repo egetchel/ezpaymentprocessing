@@ -92,7 +92,20 @@ REST Endpoint Test Application
 	 <tr>
 	 	<td>&nbsp;</td>
 	 	<td>
+	 	<%
+	 	if (serverURLs != null && serverURLs.size() > 0)
+	 	{
+	 	%>
 	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=PaymentProcessingConfigManager.getPaymentProcessingURL()%>');">Purchase (POST)</button>
+	 	<%
+	 	}
+	 	else
+	 	{
+	 	%> No Registered Services. Please spin up remote infrastructure...
+	 	<%
+	 	}
+	 	%>
+	 	
 		</td>
 	</tr>
 </table>
