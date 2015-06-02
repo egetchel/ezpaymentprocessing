@@ -19,10 +19,10 @@ import com.ezpaymentprocessing.utils.PaymentProcessingConfigManager;
 public class GearRegistrationEndpoint {
 	
 	@GET
-	public Response registerGear(@QueryParam("hostName") String hostName, @QueryParam("gearName") String gearName)
+	public Response registerGear(@QueryParam("merchantId") String merchantId, @QueryParam("promotionUrl") String promotionUrl)
 	{
-		System.out.println("Registering Gear: " + gearName + " on host "+ hostName);
-		PaymentProcessingConfigManager.addMonetizationServer(hostName, gearName);
+		System.out.println("Registering Merchant: " + merchantId + " on host "+ promotionUrl);
+		PaymentProcessingConfigManager.addMonetizationServer(merchantId, promotionUrl);
 		return Response.status(200).entity("OK").build();
 	}
 

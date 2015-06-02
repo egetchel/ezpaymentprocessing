@@ -28,7 +28,7 @@ public class PaymentProcessingConfigManager
 {
 
 	public static String PURCHASE_RESOURCE_ID = "/rest/purchase";
-	public static String PROMOTION_RESOURCE_ID = "/rest/qualifyPromotion/query";
+	//public static String PROMOTION_RESOURCE_ID = "/rest/qualifyPromotion/query";
 	public static String GEAR_REGISTRATION_RESOURCE_ID = "/rest/registerGear";
 	
 	private static String PAYMENT_SERVER_NAME = null;
@@ -44,13 +44,13 @@ public class PaymentProcessingConfigManager
 	
 	private static Object lock = new Object();
 	
-	public static void addMonetizationServer(String hostName, String gearName)
+	public static void addMonetizationServer(String merchantId, String promotionUrl)
 	{
-		String url = hostName + "/" + gearName +PROMOTION_RESOURCE_ID;
-		System.out.println("Registering remote service endpoint: " + url);
+		//String url = hostName + "/" + gearName +PROMOTION_RESOURCE_ID;
+		System.out.println("Registering remote service endpoint: " + promotionUrl);
 		synchronized (lock)
 		{
-			motenizationServerURLs.put(gearName, url);
+			motenizationServerURLs.put(merchantId, promotionUrl);
 		}
 	}
 	
