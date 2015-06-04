@@ -2,6 +2,11 @@ package com.ezpaymentprocessing.services;
 
 import com.ezpaymentprocessing.model.PurchaseResponse;
 
+/** Simple service class for qualifying a purchase
+ * 
+ * @author E. Getchell
+ *
+ */
 public class PurchaseService {
 	
 	/**

@@ -28,25 +28,26 @@ public class PaymentProcessingConfigManager
 {
 
 	public static String PURCHASE_RESOURCE_ID = "/rest/purchase";
-	//public static String PROMOTION_RESOURCE_ID = "/rest/qualifyPromotion/query";
 	public static String GEAR_REGISTRATION_RESOURCE_ID = "/rest/registerGear";
 	
 	private static String PAYMENT_SERVER_NAME = null;
-	//private static String PROMOTION_SERVER_NAME = null;
 	private static String GEAR_REGISTRATION_SERVER_NAME = null;
 	
 	private static String paymentProcessingURL = null;
-	//private static String promotionURL = null;
 	private static String gearRegistrationURL = null;
 	private static boolean isLocal = false;
 	
 	private static Map <String, String> motenizationServerURLs = new HashMap<String, String>();
 	
 	private static Object lock = new Object();
-	
+
+	/**
+	 * Adds a remote service to the list of available (registred) services.
+	 * @param merchantId The unique id of the merchant
+	 * @param promotionUrl The URL that will be called when interfacing with this merchant
+	 */
 	public static void addMonetizationServer(String merchantId, String promotionUrl)
 	{
-		//String url = hostName + "/" + gearName +PROMOTION_RESOURCE_ID;
 		System.out.println("Registering remote service endpoint: " + promotionUrl);
 		synchronized (lock)
 		{
