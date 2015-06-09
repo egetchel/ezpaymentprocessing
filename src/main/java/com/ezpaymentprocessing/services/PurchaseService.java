@@ -18,10 +18,10 @@ public class PurchaseService {
 	{
 		PurchaseResponse purchaseResponse = new PurchaseResponse();
 		
-		if (amount > 20)
+		if (amount > 2000)
 		{
 			purchaseResponse.setApproved(false);
-			purchaseResponse.setMessage("Purchase Limit of $20 exceeded");
+			purchaseResponse.setMessage("Purchase Denied - Limit of $2,000 exceeded");
 		}
 		else
 		{
