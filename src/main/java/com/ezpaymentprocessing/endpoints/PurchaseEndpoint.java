@@ -87,8 +87,18 @@ public class PurchaseEndpoint {
 	
 	private PurchaseResponse process(PurchaseRequest purchaseRequest, String contextPath)
 	{
+		Integer purchaseAmount = purchaseRequest.getAmount();
+		if (purchaseAmount == null)
+		{
+			PurchaseResponse purchaseResponse = new PurchaseResponse();
+			purchaseResponse.setApproved(false);
+			purchaseResponse.setMessage("No amount specified");
+			return purchaseResponse;
+		}
+		
+		
 		PurchaseResponse purchaseResponse = PurchaseService.execute(purchaseRequest.getAmount());
-		if (purchaseResponse.isApproved())
+		if (purchaseResponse.isApproved() && purchaseRequest.getMerchantId() != null && purchaseRequest.getMerchantId().length() > 0)
 		{
 			System.out.println("Invoking remote promotion qualification service...\n");
 			try 
