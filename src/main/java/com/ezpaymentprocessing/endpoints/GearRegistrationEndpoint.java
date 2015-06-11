@@ -16,7 +16,7 @@ import com.ezpaymentprocessing.utils.PaymentProcessingConfigManager;
  * Input is a GET method with parameters of merchant id and the promotion processing URL 
  * Example: http://localhost:8080/ezpaymentprocessing/rest/registerGear?merchantId=monetizationservice&promotionUrl=http://localhost:8081/monetizationservice/rest/qualifyPromotion/
   */
-@Path ("/registerGear")
+@Path ("/")
 @Produces("application/json")
 public class GearRegistrationEndpoint {
 	
@@ -28,9 +28,10 @@ public class GearRegistrationEndpoint {
 	 * @return
 	 */
 	@GET
+	@Path ("/registerGear")
 	public Response registerGear(@QueryParam("merchantId") String merchantId, @QueryParam("promotionUrl") String promotionUrl)
 	{
-		System.out.println("Gear Resistration Endpoint: Registering Merchant: " + merchantId + " on host "+ promotionUrl);
+		System.out.println("[GET] Registering Gear: " + merchantId + " on host "+ promotionUrl);
 		PaymentProcessingConfigManager.addMonetizationServer(merchantId, promotionUrl);
 		return Response.status(200).entity(new GenericResponse()).build();
 	}
@@ -38,10 +39,22 @@ public class GearRegistrationEndpoint {
 	@POST
 	@Produces("application/json")
 	@Consumes("application/json")
+	@Path ("/registerGear")
 	public Response registerGear(GearRegistrationRequest gearRegistrationRequest) 
 	{
-		System.out.println("[POST] qualifyPromotion(PurchaseRequest): " + gearRegistrationRequest);
+		System.out.println("[POST] Registering Gear: " + gearRegistrationRequest);
 		PaymentProcessingConfigManager.addMonetizationServer(gearRegistrationRequest.getMerchantId(), gearRegistrationRequest.getPromotionUrl());
+		return Response.status(200).entity(new GenericResponse()).build();
+	}
+	
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Path ("/unregisterGear")
+	public Response unregisterGear(GearRegistrationRequest gearRegistrationRequest) 
+	{
+		System.out.println("[POST] Unregistering Gear: " + gearRegistrationRequest);
+		PaymentProcessingConfigManager.removeMonetizationServer(gearRegistrationRequest.getMerchantId());
 		return Response.status(200).entity(new GenericResponse()).build();
 	}
 

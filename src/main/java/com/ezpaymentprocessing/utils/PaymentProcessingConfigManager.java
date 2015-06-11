@@ -37,6 +37,15 @@ public class PaymentProcessingConfigManager
 		}
 	}
 	
+	public static void removeMonetizationServer(String merchantId)
+	{
+		System.out.println("Removing gear: " + merchantId);
+		synchronized (lock)
+		{
+			motenizationServerURLs.remove(merchantId);
+		}
+	}
+	
 	
 	public static void generateRestUrls(String contextPath)
 	{
