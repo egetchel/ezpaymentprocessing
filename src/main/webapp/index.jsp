@@ -63,19 +63,14 @@ Ye Olde Cash Register
 	 <tr>
 	 	<td>&nbsp;</td>
 	 	<td>
-	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost('<%=PaymentProcessingConfigManager.getPaymentProcessingURL()%>');">Purchase (POST)</button>
+	 		<button type="submit" id="submitButtonRest" onclick="javascript:submitPost();">Purchase (POST)</button>
 		</td>
 	</tr>
 </table>
 </form>
 </div>
 <div class="black-border">
-<table>
-	<tr>
-		<td>Response Data:</td>
-		<td><div id="result"></div></td>
-	</tr>
-</table>
+<div id="result">&nbsp;</div>
 </div>		
 
 </div>
@@ -87,7 +82,7 @@ function submitPost(restEndpoint)
 	var data = JSON.stringify(frm.serializeObject());
 	$( "#result" ).html("");
 	$.ajax({
-		  url:restEndpoint,
+		  url:"<%=PaymentProcessingConfigManager.getPaymentProcessingURL()%>",
 		  type:"POST",
 		  data:data,
 		  contentType:"application/json; charset=utf-8",
@@ -99,13 +94,13 @@ function submitPost(restEndpoint)
 			  var message  = response.message;
 			  var consoleMessage;
 			  if (approved) {
-				consoleMessage = "Your purchase was approved";
+				consoleMessage = "Your purchase for $"+ $( "#amount").val() +" was approved";
 			  }
 			  else
 			  {
 				  consoleMessage = message;
 			  }
-		      //var consoleMessage = "Purchase Approved " + response.approved + " Reason: " + response.message; 
+ 
 			  $( "#result" ).html( consoleMessage );
 
 		  }
@@ -129,6 +124,17 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+$(document).keypress(function(event){
+
+	if(event.keyCode == 13) 
+	{
+    	submitPost();
+        return false;
+		
+    }
+    }
+);
 </script>
 
 </body>
