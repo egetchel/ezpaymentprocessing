@@ -9,7 +9,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-<title>Ye Olde Cash Register</title>
+<title>Merchant Portal</title>
 <style>
 body 
 {
@@ -40,49 +40,92 @@ input, textarea, select
 {
 	width:600px;
 }
+.upperCornersRound, .allCornersRound {
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+}
+.lowerCornersRound, .allCornersRound {
+	border-bottom-left-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	-moz-border-radius-bottomleft: 0.5em;
+	-moz-border-radius-bottomright: 0.5em;
+	-webkit-border-bottom-left-radius: 0.5em;
+	-webkit-border-bottom-right-radius: 0.5em;
+}
 </style>
 </head>
 <body>
 <div class="wrapper">
-<div class="black-border text-center">
-Ye Olde Cash Register
+<div class="black-border text-center upperCornersRound">
+Merchant Portal Links
 </div>
-<div class="black-border">
+<div class="black-border lowerCornersRound">
 <form id="purchaseForm">
-		<input type="hidden" name="mobileNumber" value="">
-		<input type="hidden" name="merchantId" value="">
-
 <br/>
 <table>
+
 	<tr>
-		<td>Amount:</td>
-		<td>	
-			<input type="text" name="amount" id="amount"/>
-		</td>
-	 </tr>
-	 <tr>
-	 	<td>&nbsp;</td>
-	 	<td>
-	 		<button type="submit" id="submitButtonRest" onclick="javascript:submitPost();">Purchase (POST)</button>
+		<td>Available Merchants: </td>
+		<td>
+		
+<%
+// Because I don't want to fight JSTL tags when Static classes/methods are involved...
+			Map <String,String> serverURLs = PaymentProcessingConfigManager.getMotenizationServerURLs();
+			if (serverURLs != null)
+			{
+				for (String merchantId : serverURLs.keySet())
+				{
+
+					String url = serverURLs.get(merchantId);
+					
+					// Build a URL to the index.jsp page
+					// need to handle both local (with port and context root):
+					// http://localhost:8081/monetizationservice/rest/qualifyPromotion/
+					// ... and OpenShift URLs
+					// http://monetizationservice/rest/qualifyPromotion/
+					
+					// We want everything to the left of "rest"
+					int endIndex = url.indexOf("rest");
+					
+					out.print("<a href=\"");
+					out.print(url.substring(0, endIndex));
+					out.print("\">");
+					out.print(merchantId);
+					out.print("</a><br>");
+					
+				}
+			}
+
+%>			
+	
 		</td>
 	</tr>
+	<tr><td><img src="images/Red_Hat_RGB_150px.jpg" align="right"/></td></tr>
 </table>
 </form>
 </div>
-<div class="black-border">
-<div id="result">&nbsp;</div>
-</div>		
 
 </div>
-<script type="text/javascript"> 
 
+<script type="text/javascript"> 
+function changeEndpoint()
+{
+	var selectedText = $( "#myselect option:selected" ).text();
+	
+}
 function submitPost(restEndpoint) 
 {
 	var frm = $("#purchaseForm");
 	var data = JSON.stringify(frm.serializeObject());
 	$( "#result" ).html("");
+	$("#endpoint").html(restEndpoint);
+	$("#requestData").html( data );
 	$.ajax({
-		  url:"<%=PaymentProcessingConfigManager.getPaymentProcessingURL()%>",
+		  url:restEndpoint,
 		  type:"POST",
 		  data:data,
 		  contentType:"application/json; charset=utf-8",
@@ -90,19 +133,7 @@ function submitPost(restEndpoint)
 		  success: function(response)
 		  {
 			  //alert(response);
-			  var approved = response.approved;
-			  var message  = response.message;
-			  var consoleMessage;
-			  if (approved) {
-				consoleMessage = "Your purchase for $"+ $( "#amount").val() +" was approved";
-			  }
-			  else
-			  {
-				  consoleMessage = message;
-			  }
- 
-			  $( "#result" ).html( consoleMessage );
-
+			  $( "#result" ).html( JSON.stringify(response) );
 		  }
 		});
 
@@ -125,16 +156,7 @@ $.fn.serializeObject = function()
     return o;
 };
 
-$(document).keypress(function(event){
 
-	if(event.keyCode == 13) 
-	{
-    	submitPost();
-        return false;
-		
-    }
-    }
-);
 </script>
 
 </body>
