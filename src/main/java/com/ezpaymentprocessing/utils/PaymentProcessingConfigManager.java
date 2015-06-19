@@ -31,6 +31,10 @@ public class PaymentProcessingConfigManager
 	public static void addMonetizationServer(String merchantId, String promotionUrl)
 	{
 		System.out.println("Registering remote service endpoint: " + promotionUrl);
+		if (promotionUrl == null || merchantId == null)
+		{
+			return;
+		}
 		synchronized (lock)
 		{
 			motenizationServerURLs.put(merchantId, promotionUrl);

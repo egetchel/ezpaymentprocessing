@@ -74,7 +74,7 @@ Merchant Portal Links
 		
 <%
 // Because I don't want to fight JSTL tags when Static classes/methods are involved...
-/*
+
 			Map <String,String> serverURLs = PaymentProcessingConfigManager.getMotenizationServerURLs();
 			if (serverURLs != null)
 			{
@@ -100,7 +100,7 @@ Merchant Portal Links
 					
 				}
 			}
-*/
+
 %>			
 	
 		</td>
