@@ -63,7 +63,7 @@ Ye Olde Cash Register
 	 <tr>
 	 	<td>&nbsp;</td>
 	 	<td>
-	 		<button type="submit" id="submitButtonRest" onclick="javascript:submitPost();">Purchase (POST)</button>
+	 		<button type="button" id="submitButtonRest" onclick="javascript:submitPost();">Purchase (POST)</button>
 		</td>
 	</tr>
 </table>
