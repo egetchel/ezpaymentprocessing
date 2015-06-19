@@ -22,5 +22,15 @@ public class GearRegistrationRequest
 		this.promotionUrl = promotionUrl;
 	}
 	
+	public String toString()
+	{
+		StringBuilder b = new StringBuilder();
+		b.append("Merchant Id: [");
+		b.append(merchantId);
+		b.append("]\npromotionUrl: [");
+		b.append(promotionUrl);
+		b.append("]");
+		return b.toString();
+	}	
 	
 }
