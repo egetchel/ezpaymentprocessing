@@ -85,6 +85,16 @@ public class PurchaseEndpoint {
 		return Response.status(200).entity(purchaseResponse).build();
 	}
 	
+	/**
+	 * Process the purcase.  Rough flow:
+	 * 1 - Execute the purchase
+	 * 2 - If purchase is approved
+	 *     - If the merchant id on the incoming request has a registered endpoint
+	 *         - Pass along the purchase information for promotion qualification
+	 * @param purchaseRequest
+	 * @param contextPath
+	 * @return
+	 */
 	private PurchaseResponse process(PurchaseRequest purchaseRequest, String contextPath)
 	{
 		Integer purchaseAmount = purchaseRequest.getAmount();

@@ -12,17 +12,20 @@ import com.ezpaymentprocessing.model.GearRegistrationRequest;
 import com.ezpaymentprocessing.model.GenericResponse;
 import com.ezpaymentprocessing.utils.PaymentProcessingConfigManager;
 
-/** Class to allow remote services to register with the EZPaymentProcessing application
- * Input is a GET method with parameters of merchant id and the promotion processing URL 
- * Example: http://localhost:8080/ezpaymentprocessing/rest/registerGear?merchantId=monetizationservice&promotionUrl=http://localhost:8081/monetizationservice/rest/qualifyPromotion/
-  */
+/** Endpoint allowing remote services (in this case, the per-merchant promotion service) to register with 
+ * the EZPaymentProcessing application. Once registered, if an incoming purchase request matches the dynamic endpoints
+ * based on merchant id, the purchase information will be pass along to the remote service for promotion qualification 
+ * will be fired
+ * 
+ */
 @Path ("/")
 @Produces("application/json")
 public class GearRegistrationEndpoint {
 	
 	/**
 	 * GET representation for a remote registration.
-	 * TODO: this should be a post.
+	 * TODO: this should be removed as a GET should not modify application state.  However, I left it in for ease of testing
+	 * Example: http://localhost:8080/ezpaymentprocessing/rest/registerGear?merchantId=monetizationservice&promotionUrl=http://localhost:8081/monetizationservice/rest/qualifyPromotion/
 	 * @param merchantId
 	 * @param promotionUrl
 	 * @return

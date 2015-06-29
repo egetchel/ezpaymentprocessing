@@ -21,8 +21,6 @@ public class PaymentProcessingStartupListener implements ServletContextListener
 		String contextPath = context.getContextPath();
 		
 		PaymentProcessingConfigManager.generateRestUrls(contextPath);
-		// set variable to servlet context
-		//context.setAttribute("TEST", "TEST_VALUE");
 	}
 	public void contextDestroyed(ServletContextEvent contextEvent) 
 	{

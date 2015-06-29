@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class to manage programatically defined configuration information, such as REST URLs 
+ * Static Class to manage dynamically defined configuration information, such as REST URLs 
+ * 
  * @author E. Getchell
- *
  */
 public class PaymentProcessingConfigManager 
 {
@@ -24,9 +24,12 @@ public class PaymentProcessingConfigManager
 	private static Object lock = new Object();
 
 	/**
-	 * Adds a remote service to the list of available (registered) services.
+	 * Adds a remote service to the list of available (registered) services.  For this demo
+	 * this will be invoking a promotion qualification server housed at each merchant.  This can easily
+	 * be expanded to add different services
+	 *   
 	 * @param merchantId The unique id of the merchant
-	 * @param promotionUrl The URL that will be called when interfacing with this merchant
+	 * @param promotionUrl The URL that will be called for successful purchases with this merchant - 
 	 */
 	public static void addMonetizationServer(String merchantId, String promotionUrl)
 	{
@@ -41,6 +44,10 @@ public class PaymentProcessingConfigManager
 		}
 	}
 	
+	/**
+	 * Removes a remote merchant from the available remote services.  
+	 * @param merchantId
+	 */
 	public static void removeMonetizationServer(String merchantId)
 	{
 		System.out.println("Removing gear: " + merchantId);
@@ -50,7 +57,11 @@ public class PaymentProcessingConfigManager
 		}
 	}
 	
-	
+	/**
+	 * Helper method to generate the remote URL endpoints.
+	 * 
+	 * @param contextPath
+	 */
 	public static void generateRestUrls(String contextPath)
 	{
 		System.out.println("Local ContextPath: "+ contextPath);
@@ -82,8 +93,6 @@ public class PaymentProcessingConfigManager
 			paymentProcessingURL = PAYMENT_SERVER_NAME + PURCHASE_RESOURCE_ID;
 			
 		}
-		
-		
 	}
 
 	/**

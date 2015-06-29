@@ -2,7 +2,9 @@ package com.ezpaymentprocessing.services;
 
 import com.ezpaymentprocessing.model.PurchaseResponse;
 
-/** Simple service class for qualifying a purchase
+/** 
+ * VERY Simple service class for qualifying a purchase
+ * 
  * 
  * @author E. Getchell
  *
@@ -10,9 +12,9 @@ import com.ezpaymentprocessing.model.PurchaseResponse;
 public class PurchaseService {
 	
 	/**
-	 * Rule.
+	 * Hard coded logic - anything over 2000 will be rejected.
 	 * @param amount
-	 * @return
+	 * @return PurchaseResponse indicating if the purchase was approved and an error message if deined
 	 */
 	public static PurchaseResponse execute(int amount)
 	{

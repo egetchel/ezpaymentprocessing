@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class 
+ * Servlet implementation class for executing a purchase from a JSP page
+ * 
+ * Currently has no implementation
  */
 @WebServlet("/PurchaseServlet/*")
 public class PurchaseServlet extends HttpServlet {
